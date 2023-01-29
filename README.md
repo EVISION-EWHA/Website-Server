@@ -1,5 +1,5 @@
-#Evision Website Server
-##실행 전 확인
+# Evision Website Server
+## 실행 전 확인
 
 - Mysql이 켜져있는지, evision 데이터베이스가 생성 및 실행되어 있는지 확인하기
 ```sql
