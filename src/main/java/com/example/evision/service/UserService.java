@@ -1,7 +1,8 @@
 package com.example.evision.service;
 
 import com.example.evision.DTO.LoginDTO;
-import com.example.evision.DTO.UserDTO;
+import com.example.evision.DTO.SignupDTO;
+import com.example.evision.DTO.UserInfoDTO;
 import com.example.evision.entity.Users;
 import com.example.evision.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,13 +17,14 @@ import java.util.Objects;
 public class UserService {
     private final UsersRepository usersRepository;
 
-    public int userSignup(UserDTO userDTO){
+    public int userSignup(SignupDTO signupDTO){
+        if(usersRepository.existsByUserId(signupDTO.getUserId())){ return -1; }
         Users user = new Users();
-        user.setUserId(userDTO.getUserId());
-        user.setUserPw(userDTO.getUserPw());
-        user.setEmail(userDTO.getEmail());
+        user.setUserId(signupDTO.getUserId());
+        user.setUserPw(signupDTO.getUserPw());
+        user.setEmail(signupDTO.getEmail());
         usersRepository.save(user);
-        return user.getAuthStatus();
+        return 0;
     }
 
     public int userLogin(LoginDTO loginDTO){
@@ -34,5 +36,19 @@ public class UserService {
         if(!Objects.equals(user.getUserPw(), loginDTO.getUserPw())){ return -1; }
 
         return user.getAuthStatus();
+    }
+
+    public Users putUserInfo(String userId, UserInfoDTO userInfoDTO){
+        Users user = usersRepository.findByUserId(userId);
+        String newPw = userInfoDTO.getUserPw();
+        String newEmail = userInfoDTO.getEmail();
+        if(!newPw.isEmpty()){
+            user.setUserPw(newPw);
+        }
+        if(!newEmail.isEmpty()){
+            user.setEmail(newEmail);
+        }
+        usersRepository.save(user);
+        return user;
     }
 }
