@@ -1,2 +1,0 @@
-# WebsiteServer
-Server Repository
