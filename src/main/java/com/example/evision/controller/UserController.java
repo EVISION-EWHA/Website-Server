@@ -22,6 +22,8 @@ public class UserController {
         return userService.userSignup(userDTO);
     }
 
+    // 로그인 성공 : 대기 0, 승인 1, 거절 2, 추방 3
+    // 로그인 실패 : 비밀번호 오류 -1, 아이디가 존재하지 않음 -2
     @PostMapping("/login")
     public int login(@RequestBody LoginDTO loginDTO){
         return userService.userLogin(loginDTO);

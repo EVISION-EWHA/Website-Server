@@ -33,7 +33,7 @@ public class Users {
     @Convert(converter = Jsr310JpaConverters.LocalDateTimeConverter.class)
     private LocalDateTime signupDate;
 
-    //대기 0, 승인 1, 거절 2, 추방 3
+    // 대기 0, 승인 1, 거절 2, 추방 3
     @Column(nullable = false)
     private int authStatus = 0;
 
