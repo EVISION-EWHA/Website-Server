@@ -1,7 +1,9 @@
 package com.example.evision.controller;
 
+import com.example.evision.DTO.ApplicationWithoutPwDTO;
 import com.example.evision.DTO.AuthDTO;
-import com.example.evision.entity.Users;
+import com.example.evision.DTO.RequestedUserDTO;
+import com.example.evision.DTO.UserWithoutPwDTO;
 import com.example.evision.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,17 +19,25 @@ public class AdminController {
     AdminService adminService;
 
     @GetMapping("/requests")
-    public List<Users> getRequestedUsers(){
-        return adminService.getUsersByAuthStatus(0);
-    }
+    public List<RequestedUserDTO> getRequestedUsers() {return adminService.getRequestedUsers();}
 
     @GetMapping("/users")
-    public List<Users> getAllUsers(){
+    public List<UserWithoutPwDTO> getAllUsers(){
         return adminService.getAllUsers();
     }
 
     @PutMapping("/requests")
     public void putAuthStatus(@RequestBody AuthDTO authDTO){
         adminService.putAuthStatus(authDTO);
+    }
+
+    @GetMapping("/applications")
+    public List<String> selectAllStudentId(){
+        return adminService.selectAllStudentId();
+    }
+
+    @GetMapping("/applications/{studentId}")
+    public ApplicationWithoutPwDTO getApplication(@PathVariable String studentId){
+        return adminService.getApplication(studentId);
     }
 }
