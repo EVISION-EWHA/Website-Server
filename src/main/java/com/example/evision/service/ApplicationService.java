@@ -53,4 +53,26 @@ public class ApplicationService {
         }
         return false;
     }
+
+    public Applications modifyApplication(ApplicationDTO applicationDTO){
+        Applications application = applicationsRepository.findApplicationsByStudentId(applicationDTO.getStudentId());
+        //json에서 해당하는 내용이 비어있지 않으면 내용 수정
+        if(!applicationDTO.getStudentPw().isEmpty())
+            application.setStudentPw(applicationDTO.getStudentPw());
+        if(!applicationDTO.getName().isEmpty())
+            application.setName(applicationDTO.getName());
+        if(!applicationDTO.getPhone().isEmpty())
+            application.setPhone(applicationDTO.getPhone());
+        if(!applicationDTO.getDepartment().isEmpty())
+            application.setDepartment(applicationDTO.getDepartment());
+        if(!applicationDTO.getContentA().isEmpty())
+            application.setContentA(applicationDTO.getContentA());
+        if(!applicationDTO.getContentB().isEmpty())
+            application.setContentB(applicationDTO.getContentB());
+        //얘는 비어있을 수 없으니까(둘중 하나 무조건 선택) 그냥 선택할때마다 변경
+        application.setManagement(applicationDTO.isManagement());
+
+        applicationsRepository.save(application);
+        return application;
+    }
 }
