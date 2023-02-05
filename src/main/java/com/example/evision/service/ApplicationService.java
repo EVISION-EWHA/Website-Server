@@ -28,8 +28,12 @@ public class ApplicationService {
         application.setStudentId(studentId);
         application.setStudentPw(applicationDTO.getStudentPw());
         application.setName(applicationDTO.getName());
+        application.setPhone(applicationDTO.getPhone());
         application.setDepartment(applicationDTO.getDepartment());
-        application.setContent(applicationDTO.getContent());
+        application.setPrivacy(applicationDTO.isPrivacy());
+        application.setManagement(applicationDTO.isManagement());
+        application.setContentA(applicationDTO.getContentA());
+        application.setContentB(applicationDTO.getContentB());
 
         applicationsRepository.save(application);
         return 0;

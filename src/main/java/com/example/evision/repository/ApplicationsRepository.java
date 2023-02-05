@@ -16,6 +16,6 @@ public interface ApplicationsRepository extends JpaRepository<Applications, Stri
     List<String> selectAllSQL();
 
     //해당하는 학번의 지원서 내용 중 pw 값 제외한 나머지 내용 반환
-    @Query(value = "select new com.example.evision.DTO.ApplicationWithoutPwDTO(application.studentId, application.name, application.department, application.content, application.createdDate, application.modifiedDate) from Applications application where application.studentId = :studentId")
+    @Query(value = "select new com.example.evision.DTO.ApplicationWithoutPwDTO(a.studentId, a.name, a.phone, a.department, a.privacy, a.management, a.contentA, a.contentB, a.createdDate, a.modifiedDate) from Applications a where a.studentId = :studentId")
     ApplicationWithoutPwDTO findByStudentId(@Param(value = "studentId") String studentId);
 }
