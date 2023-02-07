@@ -4,9 +4,7 @@ import com.example.evision.DTO.BoardAskDTO;
 import com.example.evision.entity.Contents;
 import com.example.evision.service.BoardService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,5 +21,10 @@ public class BoardController {
     @GetMapping("/board")
     public List<Contents> getAllContents(){
         return boardService.getAllContents();
+    }
+
+    @PutMapping("/{userId}")
+    public void putPost(@PathVariable String userId, @RequestBody BoardAskDTO boardAskDTO){
+        boardService.putPost(userId, boardAskDTO);
     }
 }

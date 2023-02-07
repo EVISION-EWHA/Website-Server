@@ -2,7 +2,9 @@ package com.example.evision.service;
 
 import com.example.evision.DTO.BoardAskDTO;
 import com.example.evision.entity.Contents;
+import com.example.evision.entity.Users;
 import com.example.evision.repository.ContentsRepository;
+import com.example.evision.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,5 +35,11 @@ public class BoardService {
 
     public List<Contents> getAllContents(){
         return contentsRepository.findAll();
+    }
+
+    public void putPost(String writerId, BoardAskDTO boardAskDTO){
+        Contents content = contentsRepository.findByWriterId(writerId);
+        content.setContent(boardAskDTO.getContent());
+        contentsRepository.save(content);
     }
 }
