@@ -8,18 +8,12 @@ import org.springframework.web.bind.annotation.*;
 import com.example.evision.DTO.BoardAskDTO;
 import com.example.evision.entity.Contents;
 import com.example.evision.service.BoardService;
-<<<<<<< HEAD
-=======
-import lombok.RequiredArgsConstructor;
-<<<<<<< HEAD
-import org.springframework.web.bind.annotation.*;
-=======
->>>>>>> 69f3fa37df279005f9cb7e11e02d28fe2eeb594d
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
->>>>>>> 49abf0108941e726c116c3360c573412c4131414
+
 
 import java.util.List;
 

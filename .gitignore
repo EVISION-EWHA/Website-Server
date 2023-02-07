@@ -28,6 +28,7 @@ out/
 !**/src/test/**/out/
 application-security.properties
 !**/main/java/com/example/evision/config/WebConfig.java
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
