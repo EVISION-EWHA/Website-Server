@@ -24,10 +24,6 @@ public class BoardService {
     public BoardAskDTO findByContentId(int contentId){
         Contents contents = contentsRepository.findByContentId(contentId);
 
-        //contentId가 존재하지 않는 경우
-//        if(!contentsRepository.existsByContentId(contentId)){
-//            return -1;
-//        }
         BoardAskDTO boardAskDTO = new BoardAskDTO();
         boardAskDTO.setContent(contents.getContent());
         boardAskDTO.setWriterId(contents.getWriterId());
@@ -41,7 +37,7 @@ public class BoardService {
     }
 
 
-    public String Write(String writerId, BoardDTO boardDTO) {
+    public String Write(BoardDTO boardDTO) {
         Contents contents = new Contents();
         contents.setContentId(boardDTO.getContentId());
         contents.setWriterId(boardDTO.getWriterId());

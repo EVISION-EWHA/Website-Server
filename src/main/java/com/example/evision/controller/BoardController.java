@@ -25,9 +25,9 @@ public class BoardController {
 
     private final BoardService boardService;
 
-    @PostMapping("/{userId}")
-    public String boardWrite( @PathVariable String userId, @RequestBody BoardDTO boardDTO) {
-        return boardService.Write(userId, boardDTO);
+    @PostMapping
+    public String boardWrite(@RequestBody BoardDTO boardDTO) {
+        return boardService.Write(boardDTO);
     }
 
     @DeleteMapping("/{userId}/{contentId}")
@@ -36,13 +36,12 @@ public class BoardController {
         return "redirect:/board";
     }
 
-
     @GetMapping("/{contentId}")
     public BoardAskDTO findByContentId(@PathVariable int contentId){
         return boardService.findByContentId(contentId);
     }
 
-    @GetMapping()
+    @GetMapping
     public List<Contents> getAllContents(){
         return boardService.getAllContents();
     }
