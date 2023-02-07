@@ -20,8 +20,7 @@ import javax.persistence.*;
 public class Boards {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int boardID;
-
+    private Integer boardID;
 
     private String userID;
 

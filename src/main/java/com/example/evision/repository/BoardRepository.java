@@ -7,7 +7,6 @@ import java.util.List;
 
 public interface BoardRepository extends JpaRepository<Boards, String> {
     Boards findByBoardID(int boardID);
-    boolean existsByBoardID(int boardID);
 
     List<Boards> findAll();
 }
