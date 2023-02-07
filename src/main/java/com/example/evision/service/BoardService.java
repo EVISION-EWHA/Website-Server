@@ -3,9 +3,7 @@ package com.example.evision.service;
 import com.example.evision.DTO.BoardAskDTO;
 import com.example.evision.DTO.BoardDTO;
 import com.example.evision.DTO.BoardEditDTO;
-import com.example.evision.entity.Boards;
 import com.example.evision.entity.Contents;
-import com.example.evision.repository.BoardRepository;
 import com.example.evision.entity.Users;
 import com.example.evision.repository.ContentsRepository;
 import com.example.evision.repository.UsersRepository;
@@ -43,21 +41,20 @@ public class BoardService {
     }
 
 
-    private final BoardRepository boardRepository;
-
     public String Write(BoardDTO boardDTO) {
-        Boards boards = new Boards();
-        boards.setUserID(boardDTO.getUserID());
-        boards.setTitle(boardDTO.getTitle());
-        boards.setContent(boardDTO.getContent());
-        boardRepository.save(boards);
+        Contents contents = new Contents();
+        contents.setContentId(boardDTO.getContentId());
+        contents.setWriterId(boardDTO.getWriterId());
+        contents.setContent(boardDTO.getContent());
+        contentsRepository.save(contents);
         return "Board saved successfully";
+
     }
 
 
-    public void Delete(int boardID) {
-        Boards boards = boardRepository.findByBoardID(boardID);
-        boardRepository.delete(boards);
+    public void Delete(int contentId) {
+        Contents contents = contentsRepository.findByContentId(contentId);
+        contentsRepository.delete(contents);
     }
 
     public void putPost(String writerId, BoardEditDTO boardEditDTO){
