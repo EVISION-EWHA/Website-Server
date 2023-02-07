@@ -2,6 +2,7 @@ package com.example.evision.controller;
 
 
 import com.example.evision.DTO.BoardDTO;
+import com.example.evision.DTO.BoardEditDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,7 +48,7 @@ public class BoardController {
     }
 
     @PutMapping("/{userId}")
-    public void putPost(@PathVariable String userId, @RequestBody BoardAskDTO boardAskDTO){
-        boardService.putPost(userId, boardAskDTO);
+    public void putPost(@PathVariable String userId, @RequestBody BoardEditDTO boardEditDTO){
+        boardService.putPost(userId, boardEditDTO);
     }
 }
