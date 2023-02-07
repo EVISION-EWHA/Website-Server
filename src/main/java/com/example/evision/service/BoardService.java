@@ -41,7 +41,7 @@ public class BoardService {
     }
 
 
-    public String Write(BoardDTO boardDTO) {
+    public String Write(String writerId, BoardDTO boardDTO) {
         Contents contents = new Contents();
         contents.setContentId(boardDTO.getContentId());
         contents.setWriterId(boardDTO.getWriterId());

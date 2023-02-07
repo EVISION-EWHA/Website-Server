@@ -25,12 +25,12 @@ public class BoardController {
 
     private final BoardService boardService;
 
-    @PostMapping("/user")
-    public String boardWrite(@RequestBody BoardDTO boardDTO) {
-        return boardService.Write(boardDTO);
+    @PostMapping("/{userId}")
+    public String boardWrite( @PathVariable String userId, @RequestBody BoardDTO boardDTO) {
+        return boardService.Write(userId, boardDTO);
     }
 
-    @DeleteMapping("/user/{contentId}")
+    @DeleteMapping("/{userId}/{contentId}")
     public String boardDelete(@PathVariable int contentId){
         boardService.Delete(contentId);
         return "redirect:/board";
