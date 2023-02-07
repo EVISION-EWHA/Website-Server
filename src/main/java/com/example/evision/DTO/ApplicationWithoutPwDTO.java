@@ -12,16 +12,24 @@ import java.time.LocalDateTime;
 public class ApplicationWithoutPwDTO {
     private String studentId;
     private String name;
+    private String phone;
     private String department;
-    private String content;
+    private boolean privacy;
+    private boolean management;
+    private String contentA;
+    private String contentB;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
 
-    public ApplicationWithoutPwDTO(String studentId, String name, String department, String content, LocalDateTime createdDate, LocalDateTime modifiedDate){
+    public ApplicationWithoutPwDTO(String studentId, String name, String phone, String department, boolean privacy, boolean management, String contentA, String contentB, LocalDateTime createdDate, LocalDateTime modifiedDate){
         this.studentId = studentId;
         this.name = name;
+        this.phone = phone;
         this.department = department;
-        this.content = content;
+        this.privacy = privacy;
+        this.management = management;
+        this.contentA = contentA;
+        this.contentB = contentB;
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
     }

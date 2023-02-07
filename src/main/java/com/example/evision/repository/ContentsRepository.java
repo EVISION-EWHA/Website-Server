@@ -8,6 +8,7 @@ import java.util.List;
 public interface ContentsRepository extends JpaRepository<Contents, Integer> {
     Contents findByContentId(int contentId);
     boolean existsByContentId(int contentId);
+    Contents findByWriterId(String writerId);
 
     List<Contents> findAll();
 }

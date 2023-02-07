@@ -30,12 +30,24 @@ public class Applications {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "phone")
+    private String phone;
+
     @Column(name = "department")
     private String department;
 
+    @Column(name = "privacy")
+    private boolean privacy;
+
+    @Column(name = "management")
+    private boolean management;
+
     //지원서 작성한 내용(추후 콘텐츠 수정)
-    @Column(name = "content")
-    private String content;
+    @Column(name = "contentA")
+    private String contentA;
+
+    @Column(name = "contentB")
+    private String contentB;
 
     @CreatedDate
     @Column(updatable = false, nullable = false)
@@ -48,14 +60,16 @@ public class Applications {
     private LocalDateTime modifiedDate;
 
     @Builder
-    public Applications(String studentId, String studentPw, String name, String department, String content, LocalDateTime createdDate, LocalDateTime modifiedDate){
+    public Applications(String studentId, String studentPw, String name, String phone, String department, boolean privacy, boolean management, String contentA, String contentB, LocalDateTime createdDate, LocalDateTime modifiedDate){
         this.studentId = studentId;
         this.studentPw = studentPw;
         this.name = name;
-
+        this.phone = phone;
         this.department = department;
-        this.content = content;
-
+        this.privacy = privacy;
+        this.management = management;
+        this.contentA = contentA;
+        this.contentB = contentB;
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
     }
