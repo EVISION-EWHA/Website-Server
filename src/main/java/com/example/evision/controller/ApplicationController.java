@@ -1,6 +1,8 @@
 package com.example.evision.controller;
 
 import com.example.evision.DTO.ApplicationDTO;
+import com.example.evision.DTO.ApplicationWithoutPwDTO;
+import com.example.evision.DTO.LoginDTO;
 import com.example.evision.entity.Applications;
 import com.example.evision.service.ApplicationService;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +21,16 @@ public class ApplicationController {
         return applicationService.createApplication(applicationDTO);
     }
 
-    @GetMapping("/{studentId}")
-    public Applications findApplication(@PathVariable String studentId){
-        return applicationService.findApplication(studentId);
+    @GetMapping
+    public ApplicationWithoutPwDTO findApplication(@RequestBody LoginDTO loginDTO){
+        if(applicationService.isValid(loginDTO)){
+            return applicationService.findApplication(loginDTO.getUserId());
+        }
+        else return null;
+    }
+
+    @PutMapping
+    public Applications modifyApplication(@RequestBody ApplicationDTO applicationDTO){
+        return applicationService.modifyApplication(applicationDTO);
     }
 }
