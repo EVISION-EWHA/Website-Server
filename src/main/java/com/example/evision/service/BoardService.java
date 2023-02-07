@@ -57,6 +57,8 @@ public class BoardService {
     public void Delete(int boardID) {
         Boards boards = boardRepository.findByBoardID(boardID);
         boardRepository.delete(boards);
+    }
+
     public void putPost(String writerId, BoardAskDTO boardAskDTO){
         Contents content = contentsRepository.findByWriterId(writerId);
         content.setContent(boardAskDTO.getContent());
