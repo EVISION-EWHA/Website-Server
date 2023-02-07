@@ -2,6 +2,7 @@ package com.example.evision.service;
 
 import com.example.evision.DTO.BoardAskDTO;
 import com.example.evision.DTO.BoardDTO;
+import com.example.evision.DTO.BoardEditDTO;
 import com.example.evision.entity.Boards;
 import com.example.evision.entity.Contents;
 import com.example.evision.repository.BoardRepository;
@@ -59,9 +60,9 @@ public class BoardService {
         boardRepository.delete(boards);
     }
 
-    public void putPost(String writerId, BoardAskDTO boardAskDTO){
+    public void putPost(String writerId, BoardEditDTO boardEditDTO){
         Contents content = contentsRepository.findByWriterId(writerId);
-        content.setContent(boardAskDTO.getContent());
+        content.setContent(boardEditDTO.getContent());
         contentsRepository.save(content);
     }
 }
