@@ -1,6 +1,7 @@
 package com.example.evision.controller;
 
 
+import com.example.evision.DTO.BoardCheckDTO;
 import com.example.evision.DTO.BoardDTO;
 import com.example.evision.DTO.BoardEditDTO;
 import lombok.RequiredArgsConstructor;
@@ -26,14 +27,13 @@ public class BoardController {
     private final BoardService boardService;
 
     @PostMapping
-    public String boardWrite(@RequestBody BoardDTO boardDTO) {
+    public Integer boardWrite(@RequestBody BoardDTO boardDTO) {
         return boardService.Write(boardDTO);
     }
 
-    @DeleteMapping("/{userId}/{contentId}")
-    public String boardDelete(@PathVariable int contentId){
-        boardService.Delete(contentId);
-        return "redirect:/board";
+    @DeleteMapping
+    public Integer boardDelete(@RequestBody BoardCheckDTO boardCheckDTO){
+        return boardService.Delete(boardCheckDTO);
     }
 
     @GetMapping("/{contentId}")
@@ -46,8 +46,8 @@ public class BoardController {
         return boardService.getAllContents();
     }
 
-    @PutMapping("/{userId}")
-    public void putPost(@PathVariable String userId, @RequestBody BoardEditDTO boardEditDTO){
-        boardService.putPost(userId, boardEditDTO);
+    @PutMapping
+    public Contents putPost(@RequestBody BoardEditDTO boardEditDTO){
+        return boardService.putPost(boardEditDTO);
     }
 }

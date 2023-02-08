@@ -5,8 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class BoardEditDTO {
-    private String userId;
+public class BoardCheckDTO {
     private Integer contentId;
-    private String content;
+    private String userId;
 }

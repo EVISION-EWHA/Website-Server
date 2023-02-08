@@ -10,6 +10,5 @@ import lombok.Setter;
 @NoArgsConstructor
 public class BoardDTO {
     public String writerId;
-    public int contentId;
     public String content;
 }

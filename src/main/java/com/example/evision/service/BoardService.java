@@ -1,6 +1,7 @@
 package com.example.evision.service;
 
 import com.example.evision.DTO.BoardAskDTO;
+import com.example.evision.DTO.BoardCheckDTO;
 import com.example.evision.DTO.BoardDTO;
 import com.example.evision.DTO.BoardEditDTO;
 import com.example.evision.entity.Contents;
@@ -37,25 +38,31 @@ public class BoardService {
     }
 
 
-    public String Write(BoardDTO boardDTO) {
+    public Integer Write(BoardDTO boardDTO) {
         Contents contents = new Contents();
-        contents.setContentId(boardDTO.getContentId());
         contents.setWriterId(boardDTO.getWriterId());
         contents.setContent(boardDTO.getContent());
-        contentsRepository.save(contents);
-        return "Board saved successfully";
+        Contents newContent = contentsRepository.save(contents);
+        return newContent.getContentId();
 
     }
 
 
-    public void Delete(int contentId) {
-        Contents contents = contentsRepository.findByContentId(contentId);
-        contentsRepository.delete(contents);
+    public Integer Delete(BoardCheckDTO boardCheckDTO) {
+        Contents contents = contentsRepository.findByContentId(boardCheckDTO.getContentId());
+        if(contents.getWriterId().equals(boardCheckDTO.getUserId())){
+            contentsRepository.delete(contents);
+            return 1;
+        }
+        return 0;
     }
 
-    public void putPost(String writerId, BoardEditDTO boardEditDTO){
-        Contents content = contentsRepository.findByWriterId(writerId);
-        content.setContent(boardEditDTO.getContent());
-        contentsRepository.save(content);
+    public Contents putPost(BoardEditDTO boardEditDTO){
+        Contents content = contentsRepository.findByContentId(boardEditDTO.getContentId());
+        if(content.getWriterId().equals(boardEditDTO.getUserId())){
+            content.setContent(boardEditDTO.getContent());
+            return contentsRepository.save(content);
+        }
+        return null;
     }
 }
