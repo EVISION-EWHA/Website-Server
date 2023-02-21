@@ -43,10 +43,10 @@ public class Applications {
     private boolean management;
 
     //지원서 작성한 내용(추후 콘텐츠 수정)
-    @Column(name = "contentA")
+    @Column(name = "contentA", length = 600)
     private String contentA;
 
-    @Column(name = "contentB")
+    @Column(name = "contentB", length = 600)
     private String contentB;
 
     @CreatedDate
