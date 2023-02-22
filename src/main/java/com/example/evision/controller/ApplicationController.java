@@ -22,7 +22,10 @@ public class ApplicationController {
     }
 
     @GetMapping
-    public ApplicationWithoutPwDTO findApplication(@RequestBody LoginDTO loginDTO){
+    public ApplicationWithoutPwDTO findApplication(String studentId, String studentPw){
+        LoginDTO loginDTO = new LoginDTO();
+        loginDTO.setUserId(studentId);
+        loginDTO.setUserPw(studentPw);
         if(applicationService.isValid(loginDTO)){
             return applicationService.findApplication(loginDTO.getUserId());
         }
