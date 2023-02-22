@@ -7,6 +7,8 @@ import com.example.evision.entity.Applications;
 import com.example.evision.repository.ApplicationsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -15,6 +17,9 @@ import java.util.Objects;
 @Slf4j
 @RequiredArgsConstructor
 public class ApplicationService {
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     private final ApplicationsRepository applicationsRepository;
 
     public int createApplication(ApplicationDTO applicationDTO) {
@@ -26,7 +31,7 @@ public class ApplicationService {
             return -1;
         }
         application.setStudentId(studentId);
-        application.setStudentPw(applicationDTO.getStudentPw());
+        application.setStudentPw(passwordEncoder.encode(applicationDTO.getStudentPw()));
         application.setName(applicationDTO.getName());
         application.setPhone(applicationDTO.getPhone());
         application.setDepartment(applicationDTO.getDepartment());
@@ -47,7 +52,7 @@ public class ApplicationService {
         String studentId = loginDTO.getUserId();
         if (applicationsRepository.existsByStudentId(studentId)) {
             Applications applications = applicationsRepository.findApplicationsByStudentId(studentId);
-            if (Objects.equals(applications.getStudentPw(), loginDTO.getUserPw())) {
+            if (passwordEncoder.matches(loginDTO.getUserPw(), applications.getStudentPw())) {
                 return true;
             }
         }
