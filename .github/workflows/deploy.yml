@@ -97,8 +97,8 @@ jobs:
           sudo docker start BabyakMongo
           sudo docker rm $(sudo docker ps -a -q -f status=exited)
           sudo docker rmi $(sudo docker images -q)
-          sudo docker pull ${{ secrets.DOCKER_REPO }}
-          sudo docker run -d -p 8080:8080 ${{ secrets.DOCKER_REPO }}
+          sudo docker pull ${{ secrets.DOCKER_USERNAME }}/evision-server
+          sudo docker run -d -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/evision-server
 
 #     # 보안 그룹에서 ip 삭제
 #     - name: Remove Github Actions IP From Security Group
