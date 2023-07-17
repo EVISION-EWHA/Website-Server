@@ -34,6 +34,17 @@ jobs:
         distribution: 'temurin'
         java-version: '11'
         
+    # 그래들 캐싱
+    - name: Gradle Caching
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+          
     # create application-secret.yml
     - name: Create application-secret.yml
       run: |
@@ -46,32 +57,50 @@ jobs:
       
     # (3) Gradle build (Test 제외)
     - name: Build with Gradle
-      uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
-      with:
-        arguments: clean build -x test
+      run: ./gradlew bootJar
 
-    # (4) AWS 인증 (IAM 사용자 Access Key, Secret Key 활용)
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ env.AWS_REGION }}
-
-    # (5) 빌드 결과물을 S3 버킷에 업로드
-    - name: Upload to AWS S3
+    # Docker Image Build
+    - name: Web Docker Build & Push
       run: |
-        aws deploy push \
-          --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
-          --ignore-hidden-files \
-          --s3-location s3://$S3_BUCKET_NAME/$GITHUB_SHA.zip \
-          --source .
+        docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+        docker build -t ${{ secrets.DOCKER_REPO }} .
+        docker push ${{ secrets.DOCKER_REPO }}
 
-    # (6) S3 버킷에 있는 파일을 대상으로 CodeDeploy 실행
-    - name: Deploy to AWS EC2 from S3
-      run: |
-        aws deploy create-deployment \
-          --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
-          --deployment-config-name CodeDeployDefault.AllAtOnce \
-          --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME }} \
-          --s3-location bucket=$S3_BUCKET_NAME,key=$GITHUB_SHA.zip,bundleType=zip
+#     # Github Action IP 가져오기
+#     - name: Get Github Actions IP
+#       id: ip
+#       uses: haythem/public-ip@v1.3
+      
+#     # EC2
+#     - name: Configure AWS Credentials
+#       uses: aws-actions/configure-aws-credentials@v1
+#       with:
+#         aws-access-key-id: ${{ secrets.AWS_EC2_ACCESS_KEY_ID }}
+#         aws-secret-access-key: ${{ secrets.AWS_EC2_SECRET_ACCESS_KEY }}
+#         aws-region: ap-northeast-2
+
+#     # 보안 그룹에 ip 추가
+#     - name: Add Github Actions IP to Security group
+#       run: |
+#         aws ec2 authorize-security-group-ingress --group-id ${{ secrets.AWS_EC2_SG_ID }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
+
+    # EC2 접속 & Pull & 실행
+    - name: executing remote ssh commands using password
+      uses: appleboy/ssh-action@v0.1.6
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ubuntu
+        key: ${{ secrets.EC2_KEY }}
+        port: 22
+        script: |
+          sudo docker stop $(sudo docker ps -a -q)
+          sudo docker start BabyakMongo
+          sudo docker rm $(sudo docker ps -a -q -f status=exited)
+          sudo docker rmi $(sudo docker images -q)
+          sudo docker pull ${{ secrets.DOCKER_REPO }}
+          sudo docker run -d -p 8080:8080 ${{ secrets.DOCKER_REPO }}
+
+#     # 보안 그룹에서 ip 삭제
+#     - name: Remove Github Actions IP From Security Group
+#       run: |
+#         aws ec2 revoke-security-group-ingress --group-id ${{ secrets.AWS_EC2_SG_ID }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
