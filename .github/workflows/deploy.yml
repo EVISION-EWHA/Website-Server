@@ -38,7 +38,7 @@ jobs:
           ${{ runner.os }}-gradle-
           
     # create application-secret.yml
-    - name: Create application-secret.yml
+    - name: Create application-secret.properties
       run: |
         # application-secret.yml 생성
         touch ./src/main/resources/application-secret.properties
@@ -47,7 +47,7 @@ jobs:
         echo "${{ secrets.APPLICATION_SECRET }}" > ./src/main/resources/application-secret.properties
       shell: bash
       
-    # (3) Gradle build (Test 제외)
+    # (3) Gradle build
     - name: Build with Gradle
       run: ./gradlew bootJar
 
@@ -55,12 +55,12 @@ jobs:
     - name: Web Docker Build & Push
       run: |
         docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-        docker build -t ${{ secrets.DOCKER_USERNAME }}/evision-server .
+        docker build --platform linux/amd64 -t ${{ secrets.DOCKER_USERNAME }}/evision-server .
         docker push ${{ secrets.DOCKER_USERNAME }}/evision-server
 
     # EC2 접속 & Pull & 실행
-    - name: executing remote ssh commands using password
-      uses: appleboy/ssh-action@v0.1.6
+    - name: EC2 Docker Run
+      uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.EC2_HOST }}
         username: ubuntu
