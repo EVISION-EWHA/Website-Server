@@ -5,14 +5,6 @@ on:
     branches:
       - main
 
-# 본인이 설정한 값을 여기서 채워넣습니다.
-# 리전, 버킷 이름, CodeDeploy 앱 이름, CodeDeploy 배포 그룹 이름
-env:
-  AWS_REGION: ap-northeast-2
-  S3_BUCKET_NAME: evision-github-actions-s3-bucket
-  CODE_DEPLOY_APPLICATION_NAME: my-codedeploy-app
-  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: my-codedeploy-deployment-group
-
 permissions:
   contents: read
 
@@ -66,23 +58,6 @@ jobs:
         docker build -t ${{ secrets.DOCKER_USERNAME }}/evision-server .
         docker push ${{ secrets.DOCKER_USERNAME }}/evision-server
 
-    # Github Action IP 가져오기
-    - name: Get Github Actions IP
-      id: ip
-      uses: haythem/public-ip@v1.3
-      
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }} 
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }} 
-        aws-region: ${{ secrets.AWS_REGION }} 
-
-#     # 보안 그룹에 ip 추가
-#     - name: Add Github Actions IP to Security group
-#       run: |
-#         aws ec2 authorize-security-group-ingress --group-id ${{ secrets.AWS_EC2_SG_ID }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
-
     # EC2 접속 & Pull & 실행
     - name: executing remote ssh commands using password
       uses: appleboy/ssh-action@v0.1.6
@@ -93,13 +68,7 @@ jobs:
         port: 22
         script: |
           sudo docker stop $(sudo docker ps -a -q)
-          sudo docker start BabyakMongo
           sudo docker rm $(sudo docker ps -a -q -f status=exited)
           sudo docker rmi $(sudo docker images -q)
           sudo docker pull ${{ secrets.DOCKER_USERNAME }}/evision-server
           sudo docker run -d -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/evision-server
-
-#     # 보안 그룹에서 ip 삭제
-#     - name: Remove Github Actions IP From Security Group
-#       run: |
-#         aws ec2 revoke-security-group-ingress --group-id ${{ secrets.AWS_EC2_SG_ID }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
